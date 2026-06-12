@@ -1,16 +1,17 @@
-import { router } from "expo-router";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
-export default function HomeScreen() {
+export default function OnboardingScreen({ navigation }) {
   return (
     <View style={styles.container}>
-      <Text style={styles.logo}>Aurora</Text>
+      <Text style={styles.title}>Meet your personal health companion</Text>
 
-      <Text style={styles.tagline}>Understand yourself better every day</Text>
+      <Text style={styles.subtitle}>
+        Track hydration, sleep, habits and receive personalized insights.
+      </Text>
 
       <TouchableOpacity
         style={styles.button}
-        onPress={() => router.push("/onboarding")}>
+        onPress={() => navigation.navigate("Login")}>
         <Text style={styles.buttonText}>Get Started</Text>
       </TouchableOpacity>
     </View>
@@ -20,35 +21,34 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#07122B",
+    backgroundColor: "#F8FAFC",
     justifyContent: "center",
-    alignItems: "center",
-    padding: 20,
+    padding: 30,
   },
 
-  logo: {
-    fontSize: 42,
+  title: {
+    fontSize: 30,
     fontWeight: "bold",
-    color: "#fff",
+    textAlign: "center",
   },
 
-  tagline: {
+  subtitle: {
     marginTop: 15,
-    color: "#94A3B8",
+    textAlign: "center",
+    color: "#64748B",
     fontSize: 16,
   },
 
   button: {
-    marginTop: 40,
     backgroundColor: "#2563EB",
-    paddingHorizontal: 30,
-    paddingVertical: 15,
+    padding: 16,
     borderRadius: 12,
+    marginTop: 40,
   },
 
   buttonText: {
+    textAlign: "center",
     color: "#fff",
     fontWeight: "bold",
-    fontSize: 16,
   },
 });
