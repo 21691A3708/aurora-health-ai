@@ -48,7 +48,8 @@
     "web": "expo start --web",
     "lint": "expo lint",
     "predeploy": "expo export --platform web",
-    "deploy": "gh-pages -d dist"
+    "deploy": "gh-pages -d dist",
+    "build": "expo export --platform web"
   },
   "private": true
 }
