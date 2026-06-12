@@ -2,7 +2,6 @@
   "name": "aurora",
   "main": "expo-router/entry",
   "version": "1.0.0",
-  "homepage": "https://21691A3708.github.io/aurora-health-ai",
   "dependencies": {
     "@expo/ui": "~56.0.16",
     "@expo/vector-icons": "^15.1.1",
