@@ -10,9 +10,8 @@ import {
   View,
 } from "react-native";
 
-import { auth, db } from "../../lib/firebase";
-
 import { collection, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
+import { auth, db } from "../../lib/firebase";
 
 export default function SleepScreen() {
   const [hours, setHours] = useState("");
@@ -20,7 +19,7 @@ export default function SleepScreen() {
   const [loading, setLoading] = useState(false);
 
   const today = new Date().toISOString().split("T")[0];
-
+  const sleepScore = Math.min((Number(hours || 0) / 8) * 100, 100);
   useEffect(() => {
     loadSleep();
     loadHistory();
@@ -61,6 +60,9 @@ export default function SleepScreen() {
         date: today,
       });
 
+      if (Number(hours) >= 8) {
+        await updateStreak();
+      }
       Alert.alert("Success", "Sleep Saved");
 
       loadHistory();
@@ -127,7 +129,27 @@ export default function SleepScreen() {
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>😴 Sleep Tracker</Text>
 
-      {/* Sleep Input */}
+      <View style={styles.sleepCircle}>
+        <Text style={styles.sleepHours}>{hours || 0}</Text>
+
+        <Text style={styles.sleepLabel}>Hours</Text>
+
+        <Text style={styles.score}>{sleepScore.toFixed(0)}/100</Text>
+      </View>
+
+      <View style={styles.statsRow}>
+        <View style={styles.statCard}>
+          <Text style={styles.cardTitle}>Quality</Text>
+
+          <Text style={styles.big}>{getSleepQuality()}</Text>
+        </View>
+
+        <View style={styles.statCard}>
+          <Text style={styles.cardTitle}>Goal</Text>
+
+          <Text style={styles.big}>8 hrs</Text>
+        </View>
+      </View>
 
       <View style={styles.card}>
         <Text style={styles.label}>Last Night Sleep</Text>
@@ -147,31 +169,11 @@ export default function SleepScreen() {
         </TouchableOpacity>
       </View>
 
-      {/* Sleep Quality */}
-
-      <View style={styles.card}>
-        <Text style={styles.cardTitle}>Sleep Quality</Text>
-
-        <Text style={styles.big}>{getSleepQuality()}</Text>
-      </View>
-
-      {/* Sleep Goal */}
-
-      <View style={styles.card}>
-        <Text style={styles.cardTitle}>Sleep Goal</Text>
-
-        <Text style={styles.big}>8 Hours</Text>
-      </View>
-
-      {/* Aurora Insight */}
-
       <View style={styles.insightCard}>
         <Text style={styles.cardTitle}>🤖 Aurora Insight</Text>
 
         <Text>{getInsight()}</Text>
       </View>
-
-      {/* History */}
 
       <View style={styles.card}>
         <Text style={styles.cardTitle}>Last 7 Days</Text>
@@ -189,6 +191,8 @@ export default function SleepScreen() {
           )}
         />
       </View>
+
+      {/* Sleep Input */}
     </ScrollView>
   );
 }
@@ -263,5 +267,46 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     borderBottomWidth: 1,
     borderBottomColor: "#E2E8F0",
+  },
+  sleepCircle: {
+    width: 180,
+    height: 180,
+    borderRadius: 90,
+    borderWidth: 10,
+    borderColor: "#8B5CF6",
+    backgroundColor: "#FFFFFF",
+    alignSelf: "center",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 20,
+  },
+
+  sleepHours: {
+    fontSize: 40,
+    fontWeight: "bold",
+  },
+
+  sleepLabel: {
+    color: "#64748B",
+  },
+
+  score: {
+    marginTop: 8,
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#8B5CF6",
+  },
+
+  statsRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 15,
+  },
+
+  statCard: {
+    backgroundColor: "#FFFFFF",
+    width: "48%",
+    padding: 20,
+    borderRadius: 16,
   },
 });
